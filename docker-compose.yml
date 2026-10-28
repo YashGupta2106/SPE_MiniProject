@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  calculator-app:
+    image: ${DOCKER_IMAGE_NAME}:${BUILD_NUMBER}
+    container_name: calculator-app
+    restart: always
+    environment:
+      - PORT=8080
+    expose:
+      - "8080"
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:8080/actuator/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    networks:
+      - calc-net
+
+  nginx-proxy:
+    image: nginx:alpine
+    container_name: nginx-proxy
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      calculator-app:
+        condition: service_healthy
+    networks:
+      - calc-net
+
+networks:
+  calc-net:
+    driver: bridge
