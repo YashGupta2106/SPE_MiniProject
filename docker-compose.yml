@@ -14,7 +14,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-      start_period: 15s
+      start_period: 90s   # <--- Increased from default to 90s to cover the ~69s boot time
     networks:
       - calc-net
 
