@@ -47,10 +47,18 @@ pipeline {
             }
         }
 
+        // stage('Deploy') {
+        //     steps {
+        //         sh "BUILD_NUMBER=${BUILD_NUMBER} DOCKER_IMAGE_NAME=${DOCKER_IMAGE_NAME} docker compose down"
+        //         sh "BUILD_NUMBER=${BUILD_NUMBER} DOCKER_IMAGE_NAME=${DOCKER_IMAGE_NAME} docker compose up -d"
+        //         sh 'sleep 10'
+        //         sh 'curl -f http://localhost:80/actuator/health'
+        //     }
+        // }
         stage('Deploy') {
             steps {
-                sh "BUILD_NUMBER=${BUILD_NUMBER} DOCKER_IMAGE_NAME=${DOCKER_IMAGE_NAME} docker compose down"
-                sh "BUILD_NUMBER=${BUILD_NUMBER} DOCKER_IMAGE_NAME=${DOCKER_IMAGE_NAME} docker compose up -d"
+                sh "BUILD_NUMBER=${BUILD_NUMBER} DOCKER_IMAGE_NAME=${DOCKER_IMAGE_NAME} docker-compose down"
+                sh "BUILD_NUMBER=${BUILD_NUMBER} DOCKER_IMAGE_NAME=${DOCKER_IMAGE_NAME} docker-compose up -d"
                 sh 'sleep 10'
                 sh 'curl -f http://localhost:80/actuator/health'
             }
